@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gelateria Jardim Genebra - Sorvetes Artesanais</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gelato: {
+                            pink: '#FCE7F3',
+                            pinkDark: '#DB2777',
+                            cream: '#FFFBEB',
+                            vanilla: '#FEF3C7',
+                            mint: '#D1FAE5',
+                            mintDark: '#059669',
+                            chocolate: '#451A03',
+                            purple: '#F3E8FF',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* CSS customizado do Banner de Cookies exatamente como solicitado */
+        .banner-cookies {
+            position: fixed;
+            /* Mantém a barra fixa mesmo ao rolar a página */
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(26, 32, 44, 0.95);
+            /* Fundo escuro com leve transparência */
+            color: #ffffff;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            /* Garante que fique sobre todos os outros elementos */
+            font-size: 14px;
+        }
+
+        /* Botão de aceite */
+        .btn-cookies {
+            background-color: #28a745;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+            /* Impede que o texto do botão quebre em duas linhas */
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-cookies:hover {
+            background-color: #218838;
+        }
+
+        /* Classe utilitária para ocultar o banner */
+        .oculto {
+            display: none !important;
+        }
+
+        /* Animações e ajustes visuais extras */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+        }
+
+        /* Scrollbar suave */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #FFFBEB;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #F472B6;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+ 
+   <div class="bg-gelato-cream text-gray-800 font-sans min-h-screen flex flex-col justify-between antialiased selection:bg-pink-300">
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" cla   ss="fixed top-5 right-5 z-[10000] flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- NAVBAR FIXED -->
+    <header
+        class="sticky top-0 z-40 bg-white/90 backdrop-blur-md shadow-sm border-b border-pink-100 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-pink-400 to-rose-300 flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-ice-cream"></i>
+                </div>
+                <div>
+                    <span class="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight block">
+                        Gelateria <span class="text-pink-600">Jd. Genebra</span>
+                    </span>
+                    <span class="text-xs text-gray-500 font-medium tracking-wider uppercase block">Sorvetes
+                        Artesanais</span>
+                </div>
+            </a>
+            <!-- INVOCAR O CHATBOT A PARTIR DE OUTRO FICHEIRO -->
+
+           
+
+            <!-- Status da Loja (Ao Vivo) -->
+            <div id="store-status"
+                class="hidden md:flex items-center px-4 py-1.5 rounded-full border text-sm font-semibold transition-all">
+                <!-- Injetado por JS -->
+            </div>
+
+            <!-- Menu de Navegação & Carrinho -->
+            <div class="flex items-center gap-3 sm:gap-6">
+                <nav class="hidden lg:flex items-center gap-6 font-medium text-gray-600 text-sm">
+                    <a href="#cardapio" class="hover:text-pink-600 transition-colors">Cardápio</a>
+                    <a href="#diferenciais" class="hover:text-pink-600 transition-colors">Diferenciais</a>
+                    <a href="#contato" class="hover:text-pink-600 transition-colors">Contato & Localização</a>
+                </nav>
+
+                <!-- Botão Carrinho -->
+                <button id="btn-open-cart" onclick="toggleCartModal()"
+                    class="relative bg-pink-600 hover:bg-pink-700 text-white font-semibold px-4 py-2.5 rounded-2xl shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    <span class="hidden sm:inline">Meu Pedido</span>
+                    <span id="cart-badge"
+                        class="bg-white text-pink-600 text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow-inner">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Banner mobile para status da loja -->
+        <div id="mobile-store-status"
+            class="md:hidden w-full text-center py-1 text-xs font-bold border-t border-b border-pink-100">
+            <!-- Injetado via JS -->
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section
+        class="relative bg-gradient-to-b from-pink-100/70 via-pink-50/40 to-gelato-cream py-12 sm:py-20 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6 text-center lg:text-left">
+                    <span
+                        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-200/60 text-pink-800 font-semibold text-xs sm:text-sm tracking-wide">
+                        <i class="fa-solid fa-heart text-pink-600"></i> A melhor do Jardim Genebra
+                    </span>
+                    <h1
+                        class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                        A felicidade é uma <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600">colherada</span>
+                        de sorvete!
+                    </h1>
+                    <p class="text-base sm:text-lg text-gray-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                        Sorvetes cremosos de massa, milkshakes reforçados e picolés recheados. Entregamos rapidinho na
+                        sua casa via <strong>Motoboy Expresso</strong>!
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#cardapio"
+                            class="w-full sm:w-auto px-8 py-4 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-2xl shadow-lg hover:shadow-pink-300/50 hover:-translate-y-0.5 transition-all text-center flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-utensils"></i> Ver Cardápio Completo
+                        </a>
+                        <a href="#contato"
+                            class="w-full sm:w-auto px-6 py-4 bg-white hover:bg-gray-50 text-gray-800 font-semibold rounded-2xl border border-gray-200 shadow-sm transition-all text-center flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-location-dot text-pink-600"></i> Onde Estamos
+                        </a>
+                    </div>
+                    <!-- Badges rápidas -->
+                    <div class="pt-6 border-t border-pink-200/60 grid grid-cols-3 gap-2 text-center">
+                        <div>
+                            <p class="font-extrabold text-pink-600 text-lg">09h - 18h</p>
+                            <p class="text-xs text-gray-500 font-medium">Todos os dias</p>
+                        </div>
+                        <div>
+                            <p class="font-extrabold text-pink-600 text-lg">Motoboy</p>
+                            <p class="text-xs text-gray-500 font-medium">Entrega rápida</p>
+                        </div>
+                        <div>
+                            <p class="font-extrabold text-pink-600 text-lg">PIX & Card</p>
+                            <p class="text-xs text-gray-500 font-medium">Pagamento fácil</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Imagem Ilustrativa -->
+                <div class="relative flex justify-center">
+                    <div
+                        class="relative w-full max-w-md aspect-square rounded-3xl bg-gradient-to-tr from-pink-300 to-amber-200 p-4 shadow-2xl rotate-1 hover:rotate-0 transition-transform duration-500">
+                        <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80"
+                            alt="Sorvetes Artesanais Deliciosos"
+                            class="w-full h-full object-cover rounded-2xl shadow-inner">
+                        <div
+                            class="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-3 border border-pink-100">
+                            <div
+                                class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">Entrega Média</p>
+                                <p class="text-sm font-bold text-gray-800">20 a 35 min</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATALOGO DE PRODUTOS -->
+    <section id="cardapio" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-10">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">Nosso Cardápio Gelado</h2>
+            <p class="mt-3 text-gray-600">Escolha seus sabores favoritos, adicione coberturas e receba em casa com toda
+                comodidade.</p>
+        </div>
+
+        <!-- ABAS DE FILTRO DA CATEGORIA -->
+        <div class="flex items-center justify-center gap-2 sm:gap-4 mb-10 overflow-x-auto py-2">
+            <button onclick="filterCategory('all')" id="btn-cat-all"
+                class="cat-btn bg-pink-600 text-white font-semibold px-5 py-2.5 rounded-2xl shadow-sm text-sm whitespace-nowrap transition-all">
+                <i class="fa-solid fa-border-all mr-1.5"></i> Todos os Itens
+            </button>
+            <button onclick="filterCategory('massa')" id="btn-cat-massa"
+                class="cat-btn bg-white hover:bg-pink-100 text-gray-700 font-semibold px-5 py-2.5 rounded-2xl shadow-sm text-sm whitespace-nowrap border border-gray-200 transition-all">
+                <i class="fa-solid fa-ice-cream text-pink-500 mr-1.5"></i> Sorvetes de Massa
+            </button>
+            <button onclick="filterCategory('milkshake')" id="btn-cat-milkshake"
+                class="cat-btn bg-white hover:bg-pink-100 text-gray-700 font-semibold px-5 py-2.5 rounded-2xl shadow-sm text-sm whitespace-nowrap border border-gray-200 transition-all">
+                <i class="fa-solid fa-glass-water text-purple-500 mr-1.5"></i> Milkshakes
+            </button>
+            <button onclick="filterCategory('especialidades')" id="btn-cat-especialidades"
+                class="cat-btn bg-white hover:bg-pink-100 text-gray-700 font-semibold px-5 py-2.5 rounded-2xl shadow-sm text-sm whitespace-nowrap border border-gray-200 transition-all">
+                <i class="fa-solid fa-bowl-food text-amber-500 mr-1.5"></i> Picolés & Taças
+            </button>
+        </div>
+
+        <!-- GRID DE PRODUTOS -->
+        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Renderizado dinamicamente via JS -->
+        </div>
+    </section>
+
+    <!-- SEÇÃO DIFERENCIAIS -->
+    <section id="diferenciais" class="py-16 bg-white border-y border-pink-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-6 rounded-3xl bg-pink-50/50 border border-pink-100 text-center space-y-3">
+                    <div
+                        class="w-14 h-14 mx-auto rounded-2xl bg-pink-200 text-pink-700 flex items-center justify-center text-2xl shadow-sm">
+                        <i class="fa-solid fa-motorcycle"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-900">Motoboy Próprio</h3>
+                    <p class="text-sm text-gray-600">Entregamos com bolsa térmica especial para garantir que seu sorvete
+                        chegue geladinho no Jardim Genebra e região.</p>
+                </div>
+                <div class="p-6 rounded-3xl bg-amber-50/50 border border-amber-100 text-center space-y-3">
+                    <div
+                        class="w-14 h-14 mx-auto rounded-2xl bg-amber-200 text-amber-800 flex items-center justify-center text-2xl shadow-sm">
+                        <i class="fa-solid fa-cow"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-900">Ingredientes Selecionados</h3>
+                    <p class="text-sm text-gray-600">Leite fresco, frutas de verdade e chocolates nobres. Sabores
+                        autênticos feitos com carinho todos os dias.</p>
+                </div>
+                <div class="p-6 rounded-3xl bg-emerald-50/50 border border-emerald-100 text-center space-y-3">
+                    <div
+                        class="w-14 h-14 mx-auto rounded-2xl bg-emerald-200 text-emerald-800 flex items-center justify-center text-2xl shadow-sm">
+                        <i class="fa-solid fa-qrcode"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-900">Pagamento sem Complicação</h3>
+                    <p class="text-sm text-gray-600">Pague via PIX Copia e Cola instantâneo ou no cartão de
+                        crédito/débito diretamente na entrega com o motoboy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTATO & LOCALIZAÇÃO -->
+    <section id="contato" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl text-white overflow-hidden shadow-xl">
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+                <div class="p-8 sm:p-12 space-y-6">
+                    <span
+                        class="inline-block px-3 py-1 bg-pink-500/20 text-pink-300 rounded-full text-xs font-semibold tracking-wider uppercase">
+                        Venha nos visitar
+                    </span>
+                    <h2 class="text-3xl font-extrabold tracking-tight">Gelateria do seu Bairro</h2>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        Estamos localizados na avenida principal do bairro Jardim Genebra. Venha trazer sua família ou
+                        peça pelo delivery no conforto da sua casa!
+                    </p>
+
+                    <div class="space-y-4 pt-2">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-pink-600/30 text-pink-400 flex items-center justify-center text-lg shrink-0">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-white">Endereço</h4>
+                                <p class="text-xs text-gray-300">Av. Principal do Jardim Genebra, nº 123 - Jardim
+                                    Genebra</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-pink-600/30 text-pink-400 flex items-center justify-center text-lg shrink-0">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-white">Horário de Atendimento</h4>
+                                <p class="text-xs text-gray-300">Segunda a Domingo: 09:00h às 18:00h</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-pink-600/30 text-pink-400 flex items-center justify-center text-lg shrink-0">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-white">WhatsApp & Telefone</h4>
+                                <p class="text-xs text-gray-300">(19) 99876-5432</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <a href="https://wa.me/5519998765432" target="_blank"
+                            class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-2xl shadow-lg transition-all text-sm">
+                            <i class="fa-brands fa-whatsapp text-lg"></i> Falar direto no WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Simulação de Mapa do Bairro -->
+                <div
+                    class="bg-gray-800 p-8 flex flex-col justify-between relative min-h-[300px] border-t lg:border-t-0 lg:border-l border-gray-700">
+                    <div
+                        class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=800&q=80')] bg-cover bg-center opacity-20">
+                    </div>
+                    <div class="relative z-10 space-y-4">
+                        <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+                            <h4 class="font-bold text-pink-300 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-map-location-dot"></i> Raio de Entrega do Motoboy
+                            </h4>
+                            <p class="text-xs text-gray-300 mt-1">
+                                Atendemos rapidamente o <strong>Jardim Genebra</strong> e bairros limítrofes com taxa
+                                fixa reduzida de R$ 5,00!
+                            </p>
+                        </div>
+                    </div>
+                    <div
+                        class="relative z-10 mt-6 bg-white text-gray-800 p-4 rounded-2xl shadow-2xl flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold text-pink-600">Gelateria Jd. Genebra</p>
+                            <p class="text-xs text-gray-500">Av. Principal, 123</p>
+                        </div>
+                        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 font-bold text-xs rounded-full">
+                            Ponto Oficial
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-gray-200 py-8 text-center text-xs text-gray-500">
+        <div class="max-w-7xl mx-auto px-4 space-y-3">
+            <p class="font-semibold text-gray-700">© Gelateria Jardim Genebra. Todos os direitos reservados.</p>
+            <p>Atendimento das 09:00 às 18:00 | Av. Principal do Jardim Genebra, nº 123 | Tel: (19) 99876-5432</p>
+        </div>
+    </footer>
+
+
+    <!-- ==================== MODAIS & INTERAÇÃO ==================== -->
+
+    <!-- MODAL 1: PERSONALIZAR ITEM DA GELATERIA -->
+    <div id="modal-product"
+        class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div
+            class="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-pink-100 relative flex flex-col">
+            <!-- Header Modal -->
+            <div class="p-4 border-b flex justify-between items-center sticky top-0 bg-white z-10">
+                <h3 id="modal-title" class="font-bold text-lg text-gray-900">Personalize seu Pedido</h3>
+                <button onclick="closeProductModal()"
+                    class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Body Modal -->
+            <div class="p-6 space-y-6 flex-1">
+                <div class="flex gap-4 items-center">
+                    <img id="modal-img" src="" alt="Produto"
+                        class="w-24 h-24 object-cover rounded-2xl shadow-sm border">
+                    <div>
+                        <h4 id="modal-name" class="font-extrabold text-gray-800 text-lg"></h4>
+                        <p id="modal-desc" class="text-xs text-gray-500 mt-1"></p>
+                        <p id="modal-base-price" class="font-bold text-pink-600 text-base mt-2"></p>
+                    </div>
+                </div>
+
+                <!-- Recipiente / Tamanho (Dinamico) -->
+                <div id="container-option-group" class="space-y-2">
+                    <label class="block font-bold text-sm text-gray-700">Escolha o Tamanho / Recipiente:</label>
+                    <div id="modal-options-list" class="grid grid-cols-3 gap-2">
+                        <!-- Injetado JS -->
+                    </div>
+                </div>
+
+                <!-- Coberturas / Adicionais -->
+                <div class="space-y-2">
+                    <label class="block font-bold text-sm text-gray-700">Adicionais & Coberturas (+ R$ 2,00
+                        cada):</label>
+                    <div id="modal-toppings-list" class="grid grid-cols-2 gap-2 text-xs">
+                        <!-- Injetado JS -->
+                    </div>
+                </div>
+
+                <!-- Observações -->
+                <div>
+                    <label class="block font-bold text-sm text-gray-700 mb-1">Observação do Item:</label>
+                    <input type="text" id="modal-notes" placeholder="Ex: Pouca calda, capricha no granulado..."
+                        class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:ring-2 focus:ring-pink-400 outline-none">
+                </div>
+
+                <!-- Quantidade -->
+                <div class="flex items-center justify-between pt-2 border-t">
+                    <span class="font-bold text-sm text-gray-700">Quantidade:</span>
+                    <div class="flex items-center gap-3">
+                        <button onclick="adjustModalQty(-1)"
+                            class="w-9 h-9 rounded-xl bg-pink-100 hover:bg-pink-200 text-pink-700 font-bold flex items-center justify-center">-</button>
+                        <span id="modal-qty" class="font-bold text-base w-6 text-center">1</span>
+                        <button onclick="adjustModalQty(1)"
+                            class="w-9 h-9 rounded-xl bg-pink-100 hover:bg-pink-200 text-pink-700 font-bold flex items-center justify-center">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Modal -->
+            <div class="p-4 bg-gray-50 border-t flex items-center justify-between">
+                <div>
+                    <span class="text-xs text-gray-500 block">Valor do Item:</span>
+                    <span id="modal-total-price" class="font-extrabold text-xl text-pink-600">R$ 0,00</span>
+                </div>
+                <button onclick="confirmAddToCart()"
+                    class="bg-pink-600 hover:bg-pink-700 text-white font-bold px-6 py-3 rounded-2xl shadow-md transition-all text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Adicionar ao Carrinho
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL 2: CARRINHO DE COMPRAS INTERATIVO -->
+    <div id="modal-cart"
+        class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-md h-full flex flex-col shadow-2xl">
+            <!-- Header Cart -->
+            <div class="p-5 border-b bg-pink-50 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-basket-shopping text-pink-600 text-xl"></i>
+                    <h3 class="font-extrabold text-gray-900 text-lg">Seu Carrinho</h3>
+                </div>
+                <button onclick="toggleCartModal()"
+                    class="w-8 h-8 rounded-full bg-white hover:bg-gray-100 text-gray-600 flex items-center justify-center shadow-sm">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Lista de Itens -->
+            <div id="cart-items-container" class="flex-1 overflow-y-auto p-5 space-y-4">
+                <!-- Injetado por JS -->
+            </div>
+
+            <!-- Opção de Entrega -->
+            <div class="p-5 border-t bg-gray-50 space-y-3">
+                <label class="block font-bold text-xs text-gray-700 uppercase tracking-wider">Forma de Envio:</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <label
+                        class="flex items-center gap-2 p-3 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-pink-300">
+                        <input type="radio" name="fulfillment" value="motoboy" checked onchange="updateCartTotals()"
+                            class="accent-pink-600">
+                        <div>
+                            <span class="block text-xs font-bold text-gray-800">Motoboy</span>
+                            <span class="block text-[10px] text-gray-500">Jd. Genebra (R$ 5,00)</span>
+                        </div>
+                    </label>
+                    <label
+                        class="flex items-center gap-2 p-3 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-pink-300">
+                        <input type="radio" name="fulfillment" value="retirada" onchange="updateCartTotals()"
+                            class="accent-pink-600">
+                        <div>
+                            <span class="block text-xs font-bold text-gray-800">Retirada</span>
+                            <span class="block text-[10px] text-gray-500">No Balcão (Grátis)</span>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- Resumo -->
+                <div class="space-y-1.5 pt-2 text-xs text-gray-600 border-t">
+                    <div class="flex justify-between">
+                        <span>Subtotal:</span>
+                        <span id="cart-subtotal" class="font-semibold text-gray-800">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Taxa de Entrega:</span>
+                        <span id="cart-delivery-fee" class="font-semibold text-gray-800">R$ 5,00</span>
+                    </div>
+                    <div class="flex justify-between text-base font-extrabold text-pink-600 pt-1 border-t">
+                        <span>Total:</span>
+                        <span id="cart-total">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <button onclick="goToCheckout()"
+                    class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl shadow-lg transition-all text-sm flex items-center justify-center gap-2">
+                    Avançar para Cadastro & Pagamento <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL 3: CHECKOUT E CADASTRO DO CLIENTE -->
+    <div id="modal-checkout"
+        class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div
+            class="bg-white rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-pink-100 flex flex-col">
+            <!-- Header Checkout -->
+            <div class="p-5 border-b bg-pink-50 flex justify-between items-center sticky top-0 z-10">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-clipboard-check text-pink-600 text-xl"></i>
+                    <h3 class="font-extrabold text-gray-900 text-lg">Dados para Entrega e Pagamento</h3>
+                </div>
+                <button onclick="closeCheckoutModal()"
+                    class="w-8 h-8 rounded-full bg-white hover:bg-gray-100 text-gray-600 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Form Body -->
+            <form id="checkout-form" onsubmit="submitOrder(event)" class="p-6 space-y-5 flex-1 text-xs sm:text-sm">
+                <!-- Seção Cadastro -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-gray-800 text-sm flex items-center gap-1.5 text-pink-600">
+                        <i class="fa-solid fa-user"></i> 1. Seus Dados Pessoais
+                    </h4>
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-1">Nome Completo *</label>
+                        <input type="text" id="cust-name" required placeholder="Digite seu nome completo"
+                            class="w-full px-3 py-2.5 border rounded-xl outline-none focus:ring-2 focus:ring-pink-500">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-1">Telefone / WhatsApp *</label>
+                        <input type="tel" id="cust-phone" required placeholder="(19) 99999-9999"
+                            class="w-full px-3 py-2.5 border rounded-xl outline-none focus:ring-2 focus:ring-pink-500">
+                    </div>
+                </div>
+
+                <!-- Seção Endereço -->
+                <div id="address-section" class="space-y-3 border-t pt-4">
+                    <h4 class="font-bold text-gray-800 text-sm flex items-center gap-1.5 text-pink-600">
+                        <i class="fa-solid fa-house"></i> 2. Endereço de Entrega
+                    </h4>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="col-span-2">
+                            <label class="block font-semibold text-gray-700 mb-1">Rua / Avenida *</label>
+                            <input type="text" id="cust-street" required placeholder="Nome da rua"
+                                class="w-full px-3 py-2.5 border rounded-xl outline-none focus:ring-2 focus:ring-pink-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-700 mb-1">Número *</label>
+                            <input type="text" id="cust-number" required placeholder="123"
+                                class="w-full px-3 py-2.5 border rounded-xl outline-none focus:ring-2 focus:ring-pink-500">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block font-semibold text-gray-700 mb-1">Bairro *</label>
+                            <input type="text" id="cust-neighborhood" value="Jardim Genebra" required
+                                class="w-full px-3 py-2.5 border rounded-xl bg-gray-50 outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-700 mb-1">Ponto de Referência</label>
+                            <input type="text" id="cust-reference" placeholder="Ex: Próximo à praça"
+                                class="w-full px-3 py-2.5 border rounded-xl outline-none focus:ring-2 focus:ring-pink-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção Pagamento -->
+                <div class="space-y-3 border-t pt-4">
+                    <h4 class="font-bold text-gray-800 text-sm flex items-center gap-1.5 text-pink-600">
+                        <i class="fa-solid fa-credit-card"></i> 3. Forma de Pagamento
+                    </h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label onclick="togglePaymentMethod('pix')"
+                            class="flex items-center gap-2 p-3 border rounded-2xl cursor-pointer hover:border-pink-500 bg-emerald-50/50">
+                            <input type="radio" name="payment_method" value="pix" checked class="accent-pink-600">
+                            <div>
+                                <span class="font-bold text-gray-800 block">PIX</span>
+                                <span class="text-[10px] text-gray-500">Desconto/Aprovação Rápida</span>
+                            </div>
+                        </label>
+                        <label onclick="togglePaymentMethod('card')"
+                            class="flex items-center gap-2 p-3 border rounded-2xl cursor-pointer hover:border-pink-500 bg-blue-50/50">
+                            <input type="radio" name="payment_method" value="card" class="accent-pink-600">
+                            <div>
+                                <span class="font-bold text-gray-800 block">Cartão na Entrega</span>
+                                <span class="text-[10px] text-gray-500">Crédito ou Débito</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Detalhes Pagamento PIX -->
+                    <div id="pix-details"
+                        class="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-center space-y-3">
+                        <p class="font-bold text-emerald-800 text-xs">Escaneie o QR Code ou Copie a Chave PIX abaixo:
+                        </p>
+                        <!-- QR Code Simulado com SVG -->
+                        <div
+                            class="w-32 h-32 mx-auto bg-white p-2 rounded-xl shadow-inner border flex items-center justify-center">
+                            <svg class="w-full h-full text-gray-800" viewBox="0 0 100 100" fill="currentColor">
+                                <path d="M10,10 h30 v30 h-30 z M15,15 v20 h20 v-20 z M22,22 h6 v6 h-6 z"></path>
+                                <path d="M60,10 h30 v30 h-30 z M65,15 v20 h20 v-20 z M72,22 h6 v6 h-6 z"></path>
+                                <path d="M10,60 h30 v30 h-30 z M15,65 v20 h20 v-20 z M22,72 h6 v6 h-6 z"></path>
+                                <rect x="45" y="15" width="8" height="25"></rect>
+                                <rect x="15" y="45" width="25" height="8"></rect>
+                                <rect x="50" y="50" width="15" height="15"></rect>
+                                <rect x="70" y="60" width="20" height="20"></rect>
+                            </svg>
+                        </div>
+                        <div class="flex items-center justify-center gap-2">
+                            <input type="text" readonly id="pix-key-input" value="19998765432"
+                                class="bg-white px-3 py-1.5 border rounded-lg text-xs text-center font-mono w-48 select-all">
+                            <button type="button" onclick="copyPixKey()"
+                                class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-lg text-xs">
+                                <i class="fa-solid fa-copy"></i> Copiar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Detalhes Pagamento Cartão -->
+                    <div id="card-details" class="p-4 bg-blue-50 rounded-2xl border border-blue-200 hidden space-y-2">
+                        <label class="block font-semibold text-gray-700">Qual a bandeira/tipo do cartão?</label>
+                        <select id="card-type" class="w-full px-3 py-2 border rounded-xl bg-white outline-none">
+                            <option value="Cartão de Débito">Cartão de Débito (Maquininha com Motoboy)</option>
+                            <option value="Cartão de Crédito - Visa/Master">Crédito (Visa / Mastercard)</option>
+                            <option value="Cartão Elo / Hipercard">Crédito (Elo / Hipercard / Outros)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-4 border-t flex flex-col gap-2">
+                    <button type="submit"
+                        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-4 rounded-2xl shadow-xl text-base flex items-center justify-center gap-2 transition-all">
+                        <i class="fa-brands fa-whatsapp text-xl"></i> Concluir e Enviar Pedido no WhatsApp
+                    </button>
+                    <p class="text-[11px] text-gray-500 text-center">Seu pedido será formatado e enviado diretamente
+                        para nosso atendimento no WhatsApp.</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ==================== BANNER DE AVISO DE COOKIES (SOLICITADO EXACT) ==================== -->
+    <div id="banner-cookies" class="banner-cookies">
+        <p>
+            Utilizamos cookies para personalizar sua experiência. Ao continuar navegando, você concorda com a nossa
+            política.
+        </p>
+        <button id="btn-aceitar-cookies" class="btn-cookies">Entendi e Aceito</button>
+    </div>
+
+
+    <!-- ==================== JAVASCRIPT PRINCIPAL ==================== -->
+    <script>
+        // -----------------------------------------------------------------
+        // 1. BANNER DE COOKIES (CÓDIGO EXATO SOLICITADO COM LOCALSTORAGE)
+        // -----------------------------------------------------------------
+        const bannerCookies = document.getElementById('banner-cookies');
+        const btnAceitar = document.getElementById('btn-aceitar-cookies');
+
+        // Verifica se o usuário já aceitou os cookies anteriormente
+        const cookiesAceitos = localStorage.getItem('cookiesAceitos');
+
+        if (cookiesAceitos === 'sim') {
+            // Se já aceitou antes, esconde o banner imediatamente
+            bannerCookies.classList.add('oculto');
+        }
+
+        // Adiciona o evento de clique no botão "Entendi e Aceito"
+        btnAceitar.addEventListener('click', () => {
+            // Salva a decisão do usuário no navegador
+            localStorage.setItem('cookiesAceitos', 'sim');
+
+            // Esconde o banner da tela
+            bannerCookies.classList.add('oculto');
+        });
+
+
+        // -----------------------------------------------------------------
+        // 2. DADOS E CATÁLOGO DA GELATERIA JARDIM GENEBRA
+        // -----------------------------------------------------------------
+        const PRODUCTS = [
+            // Sorvetes de Massa
+            {
+                id: 'm1',
+                name: 'Chocolate Belga Extra Cremoso',
+                category: 'massa',
+                price: 12.00,
+                desc: 'Feito com puro cacau belga 70%, sabor intenso e textura ultra aveludada.',
+                image: 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=500&q=80',
+                containers: [{ name: 'Copinho P (1 Bola)', priceAdd: 0 }, { name: 'Cascão Crocante', priceAdd: 3.00 }, { name: 'Copinho G (2 Bolas)', priceAdd: 6.00 }]
+            },
+            {
+                id: 'm2',
+                name: 'Morango Natural Gourmet',
+                category: 'massa',
+                price: 10.00,
+                desc: 'Massa leve artesanal preparada com morangos frescos selecionados da região.',
+                image: 'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&w=500&q=80',
+                containers: [{ name: 'Casquinha Tradicional', priceAdd: 0 }, { name: 'Cascão Crocante', priceAdd: 3.00 }, { name: 'Copinho G (2 Bolas)', priceAdd: 6.00 }]
+            },
+            {
+                id: 'm3',
+                name: 'Pistache Italiano',
+                category: 'massa',
+                price: 14.00,
+                desc: 'Autêntica pasta de pistache vinda da Sicília, sem aromatizantes artificiais.',
+                image: 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?auto=format&fit=crop&w=500&q=80',
+                containers: [{ name: 'Copinho P (1 Bola)', priceAdd: 0 }, { name: 'Cascão Crocante', priceAdd: 3.00 }, { name: 'Copinho G (2 Bolas)', priceAdd: 6.00 }]
+            },
+            {
+                id: 'm4',
+                name: 'Ninho com Nutella',
+                category: 'massa',
+                price: 13.00,
+                desc: 'Sorvete rico de Leite Ninho mesclado com generosas camadas de Nutella pura.',
+                image: 'https://images.unsplash.com/photo-1560008581-09826d1de69e?auto=format&fit=crop&w=500&q=80',
+                containers: [{ name: 'Casquinha Tradicional', priceAdd: 0 }, { name: 'Cascão Crocante', priceAdd: 3.00 }, { name: 'Copinho G (2 Bolas)', priceAdd: 6.00 }]
+            },
+            {
+                id: 'm5',
+                name: 'Maracujá com Calda Doce',
+                category: 'massa',
+                price: 11.00,
+                desc: 'O equilíbrio perfeito entre o azedinho da fruta e o adocicado da calda artesanal.',
+                image: 'https://images.unsplash.com/photo-1580915411954-282cb1b0d780?auto=format&fit=crop&w=500&q=80',
+                containers: [{ name: 'Copinho P (1 Bola)', priceAdd: 0 }, { name: 'Cascão Crocante', priceAdd: 3.00 }]
+            },
+            {
+                id: 'm6',
+                name: 'Doce de Leite Viçosa',
+                category: 'massa',
+                price: 12.00,
+                desc: 'Tradicional receita mineira com textura incrivelmente cremosa.',
+                image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=500&q=80',
+                containers: [{ name: 'Casquinha Tradicional', priceAdd: 0 }, { name: 'Cascão Crocante', priceAdd: 3.00 }]
+            },
+            {
+                id: 'm7',
+                name: 'Baunilha Real Madagascar',
+                category: 'massa',
+                price: 10.00,
+                desc: 'Sabor clássico com sementes fava de baunilha madagascarense.',
+                image: 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=500&q=80',
+                containers: [{ name: 'Casquinha Tradicional', priceAdd: 0 }, { name: 'Cascão Crocante', priceAdd: 3.00 }]
+            },
+            {
+                id: 'm8',
+                name: 'Flocos Tradicional',
+                category: 'massa',
+                price: 10.00,
+                desc: 'Creme suave recheado com lascas crocantes de chocolate meio amargo.',
+                image: 'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&w=500&q=80',
+                containers: [{ name: 'Casquinha Tradicional', priceAdd: 0 }, { name: 'Cascão Crocante', priceAdd: 3.00 }]
+            },
+
+            // Milkshakes
+            {
+                id: 's1',
+                name: 'Milkshake Ovomaltine Crocante',
+                category: 'milkshake',
+                price: 14.00,
+                desc: 'Batido na hora com muito Ovomaltine, calda no copo e chantilly de cortesia.',
+                image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=500&q=80',
+                containers: [{ name: 'Pequeno 300ml', priceAdd: 0 }, { name: 'Médio 500ml', priceAdd: 4.00 }, { name: 'Grande 700ml', priceAdd: 8.00 }]
+            },
+            {
+                id: 's2',
+                name: 'Milkshake Nutella Suprema',
+                category: 'milkshake',
+                price: 16.00,
+                desc: 'Base super aveludada, recheado com bastante Nutella e borda lambuzada.',
+                image: 'https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=500&q=80',
+                containers: [{ name: 'Pequeno 300ml', priceAdd: 0 }, { name: 'Médio 500ml', priceAdd: 4.00 }, { name: 'Grande 700ml', priceAdd: 8.00 }]
+            },
+            {
+                id: 's3',
+                name: 'Milkshake Oreo Crema',
+                category: 'milkshake',
+                price: 15.00,
+                desc: 'Biscoito Oreo triturado de verdade mesclado em creme de baunilha.',
+                image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=500&q=80',
+                containers: [{ name: 'Pequeno 300ml', priceAdd: 0 }, { name: 'Médio 500ml', priceAdd: 4.00 }, { name: 'Grande 700ml', priceAdd: 8.00 }]
+            },
+            {
+                id: 's4',
+                name: 'Milkshake Morango Gourmet',
+                category: 'milkshake',
+                price: 14.00,
+                desc: 'Calda de morango caseira com pedaços e sorvete artesanal.',
+                image: 'https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=500&q=80',
+                containers: [{ name: 'Pequeno 300ml', priceAdd: 0 }, { name: 'Médio 500ml', priceAdd: 4.00 }, { name: 'Grande 700ml', priceAdd: 8.00 }]
+            },
+
+            // Especialidades & Picolés
+            {
+                id: 'e1',
+                name: 'Picolé Recheado Ninho com Nutella',
+                category: 'especialidades',
+                price: 8.50,
+                desc: 'Casca cremosa de leite ninho recheada até o palito com Nutella fluida.',
+                image: 'https://images.unsplash.com/photo-1488900128323-21503983a07e?auto=format&fit=crop&w=500&q=80',
+                containers: [{ name: 'Unidade 100g', priceAdd: 0 }]
+            },
+            {
+                id: 'e2',
+                name: 'Açaí na Tigela Completo (500ml)',
+                category: 'especialidades',
+                price: 22.00,
+                desc: 'Açaí puro do Pará, acompanha banana fatiada, leite em pó, granola e leite condensado.',
+                image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=500&q=80',
+                containers: [{ name: 'Tigela 500ml', priceAdd: 0 }]
+            },
+            {
+                id: 'e3',
+                name: 'Taça Sundae Especial',
+                category: 'especialidades',
+                price: 24.00,
+                desc: '3 bolas à sua escolha, coberta com calda quente, chantilly, castanhas e cereja.',
+                image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=500&q=80',
+                containers: [{ name: 'Taça Completa', priceAdd: 0 }]
+            },
+            {
+                id: 'e4',
+                name: 'Banana Split Genebra',
+                category: 'especialidades',
+                price: 26.00,
+                desc: 'Banana fatiada ao meio, 3 bolas gigantes, 3 caldas diferentes, castanhas e tubetes.',
+                image: 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=500&q=80',
+                containers: [{ name: 'Prato Especial', priceAdd: 0 }]
+            }
+        ];
+
+        const TOPPINGS = [
+            { id: 't1', name: 'Calda de Chocolate' },
+            { id: 't2', name: 'Granulado Belga' },
+            { id: 't3', name: 'Leite Ninho em Pó' },
+            { id: 't4', name: 'Chantilly Cremoso' },
+            { id: 't5', name: 'Castanha de Caju' },
+            { id: 't6', name: 'Nutella Extra (+ R$ 2)' }
+        ];
+
+        // -----------------------------------------------------------------
+        // 3. ESTADO DA APLICAÇÃO (CARRINHO & SELEÇÃO)
+        // -----------------------------------------------------------------
+        let cart = [];
+        let currentModalProduct = null;
+        let selectedContainerIndex = 0;
+        let selectedToppings = [];
+        let modalQty = 1;
+
+        // -----------------------------------------------------------------
+        // 4. INICIALIZAÇÃO & VERIFICAÇÃO DO HORÁRIO (09:00h às 18:00h)
+        // -----------------------------------------------------------------
+        window.addEventListener('DOMContentLoaded', () => {
+            checkStoreStatus();
+            renderProducts('all');
+            setInterval(checkStoreStatus, 60000); // Atualiza status a cada minuto
+        });
+
+        function checkStoreStatus() {
+            const now = new Date();
+            const currentHour = now.getHours(); // 0 a 23
+            // Abre das 09h e fecha as 18h
+            const isOpen = currentHour >= 9 && currentHour < 18;
+
+            const desktopStatus = document.getElementById('store-status');
+            const mobileStatus = document.getElementById('mobile-store-status');
+
+            if (isOpen) {
+                const openHTML = `
+                    <span class="flex h-2.5 w-2.5 relative mr-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                    </span>
+                    <span class="text-emerald-700 font-bold text-xs">ABERTO AGORA (09h - 18h)</span>
+                `;
+                desktopStatus.innerHTML = openHTML;
+                desktopStatus.className = "hidden md:flex items-center px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200";
+
+                mobileStatus.innerHTML = `<span class="text-emerald-700 font-bold">● Aberto Agora</span> - Entregando no Jd. Genebra!`;
+                mobileStatus.className = "md:hidden w-full text-center py-1 text-xs font-bold bg-emerald-50 text-emerald-800 border-b border-emerald-100";
+            } else {
+                const closedHTML = `
+                    <span class="h-2.5 w-2.5 rounded-full bg-rose-500 mr-2 inline-block"></span>
+                    <span class="text-rose-700 font-bold text-xs">FECHADO (Abre às 09:00)</span>
+                `;
+                desktopStatus.innerHTML = closedHTML;
+                desktopStatus.className = "hidden md:flex items-center px-3 py-1 rounded-full bg-rose-50 border border-rose-200";
+
+                mobileStatus.innerHTML = `<span class="text-rose-600 font-bold">● Fechado</span> - Funcionamento das 09h às 18h`;
+                mobileStatus.className = "md:hidden w-full text-center py-1 text-xs font-bold bg-rose-50 text-rose-800 border-b border-rose-100";
+            }
+        }
+
+        // -----------------------------------------------------------------
+        // 5. RENDERING DO CARDÁPIO
+        // -----------------------------------------------------------------
+        function renderProducts(categoryFilter) {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+
+            const filtered = categoryFilter === 'all'
+                ? PRODUCTS
+                : PRODUCTS.filter(p => p.category === categoryFilter);
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-3xl p-4 shadow-sm hover:shadow-xl transition-all border border-pink-100/80 flex flex-col justify-between group";
+                card.innerHTML = `
+                    <div>
+                        <div class="relative overflow-hidden rounded-2xl mb-4 aspect-video bg-pink-50">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            <span class="absolute top-2 right-2 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-bold text-pink-600 shadow-sm">
+                                R$ ${p.price.toFixed(2).replace('.', ',')}
+                            </span>
+                        </div>
+                        <h3 class="font-extrabold text-gray-800 text-base leading-tight">${p.name}</h3>
+                        <p class="text-xs text-gray-500 mt-1.5 line-clamp-2">${p.desc}</p>
+                    </div>
+                    <button onclick="openProductModal('${p.id}')" class="mt-4 w-full bg-pink-50 hover:bg-pink-600 text-pink-600 hover:text-white font-bold py-2.5 rounded-2xl border border-pink-200 hover:border-pink-600 transition-all text-xs flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-plus"></i> Montar & Pedir
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterCategory(cat) {
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = "cat-btn bg-white hover:bg-pink-100 text-gray-700 font-semibold px-5 py-2.5 rounded-2xl shadow-sm text-sm whitespace-nowrap border border-gray-200 transition-all";
+            });
+            const activeBtn = document.getElementById(`btn-cat-${cat}`);
+            if (activeBtn) {
+                activeBtn.className = "cat-btn bg-pink-600 text-white font-semibold px-5 py-2.5 rounded-2xl shadow-sm text-sm whitespace-nowrap transition-all";
+            }
+            renderProducts(cat);
+        }
+
+        // -----------------------------------------------------------------
+        // 6. MODAL DE PERSONALIZAÇÃO
+        // -----------------------------------------------------------------
+        function openProductModal(productId) {
+            currentModalProduct = PRODUCTS.find(p => p.id === productId);
+            if (!currentModalProduct) return;
+
+            selectedContainerIndex = 0;
+            selectedToppings = [];
+            modalQty = 1;
+
+            document.getElementById('modal-img').src = currentModalProduct.image;
+            document.getElementById('modal-name').innerText = currentModalProduct.name;
+            document.getElementById('modal-desc').innerText = currentModalProduct.desc;
+            document.getElementById('modal-base-price').innerText = `A partir de R$ ${currentModalProduct.price.toFixed(2).replace('.', ',')}`;
+            document.getElementById('modal-notes').value = '';
+            document.getElementById('modal-qty').innerText = modalQty;
+
+            // Render Containers/Tamanhos
+            const containersList = document.getElementById('modal-options-list');
+            containersList.innerHTML = '';
+            currentModalProduct.containers.forEach((c, idx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `p-2.5 rounded-xl border text-xs font-bold transition-all text-center ${idx === 0 ? 'border-pink-600 bg-pink-50 text-pink-700' : 'border-gray-200 text-gray-600'}`;
+                btn.onclick = () => {
+                    selectedContainerIndex = idx;
+                    document.querySelectorAll('#modal-options-list button').forEach((b, i) => {
+                        b.className = `p-2.5 rounded-xl border text-xs font-bold transition-all text-center ${i === idx ? 'border-pink-600 bg-pink-50 text-pink-700' : 'border-gray-200 text-gray-600'}`;
+                    });
+                    updateModalTotalPrice();
+                };
+                btn.innerText = `${c.name} ${c.priceAdd > 0 ? '(+R$' + c.priceAdd.toFixed(2) + ')' : ''}`;
+                containersList.appendChild(btn);
+            });
+
+            // Render Toppings
+            const toppingsList = document.getElementById('modal-toppings-list');
+            toppingsList.innerHTML = '';
+            TOPPINGS.forEach(t => {
+                const label = document.createElement('label');
+                label.className = "flex items-center gap-2 p-2 border border-gray-100 rounded-xl bg-gray-50/50 cursor-pointer hover:bg-pink-50/50";
+                label.innerHTML = `
+                    <input type="checkbox" value="${t.id}" onchange="toggleTopping('${t.id}')" class="accent-pink-600 rounded">
+                    <span class="text-gray-700 text-xs">${t.name}</span>
+                `;
+                toppingsList.appendChild(label);
+            });
+
+            updateModalTotalPrice();
+
+            const modal = document.getElementById('modal-product');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closeProductModal() {
+            const modal = document.getElementById('modal-product');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function toggleTopping(id) {
+            if (selectedToppings.includes(id)) {
+                selectedToppings = selectedToppings.filter(tId => tId !== id);
+            } else {
+                selectedToppings.push(id);
+            }
+            updateModalTotalPrice();
+        }
+
+        function adjustModalQty(delta) {
+            modalQty = Math.max(1, modalQty + delta);
+            document.getElementById('modal-qty').innerText = modalQty;
+            updateModalTotalPrice();
+        }
+
+        function updateModalTotalPrice() {
+            if (!currentModalProduct) return;
+            const containerAdd = currentModalProduct.containers[selectedContainerIndex].priceAdd || 0;
+            const toppingsAdd = selectedToppings.length * 2.00; // R$ 2 por adicional
+            const singleUnitPrice = currentModalProduct.price + containerAdd + toppingsAdd;
+            const total = singleUnitPrice * modalQty;
+
+            document.getElementById('modal-total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        function confirmAddToCart() {
+            const container = currentModalProduct.containers[selectedContainerIndex];
+            const toppingsNames = selectedToppings.map(id => TOPPINGS.find(t => t.id === id).name);
+            const notes = document.getElementById('modal-notes').value.trim();
+
+            const singleUnitPrice = currentModalProduct.price + container.priceAdd + (selectedToppings.length * 2.00);
+
+            const cartItem = {
+                cartId: Date.now(),
+                productId: currentModalProduct.id,
+                name: currentModalProduct.name,
+                containerName: container.name,
+                toppings: toppingsNames,
+                notes: notes,
+                qty: modalQty,
+                unitPrice: singleUnitPrice,
+                totalPrice: singleUnitPrice * modalQty
+            };
+
+            cart.push(cartItem);
+            updateCartBadge();
+            closeProductModal();
+            showToast('Item adicionado ao carrinho com sucesso!');
+        }
+
+        // -----------------------------------------------------------------
+        // 7. CARRINHO INTERATIVO
+        // -----------------------------------------------------------------
+        function toggleCartModal() {
+            const modal = document.getElementById('modal-cart');
+            if (modal.classList.contains('hidden')) {
+                renderCartItems();
+                updateCartTotals();
+                modal.classList.remove('hidden');
+                setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            } else {
+                modal.classList.add('opacity-0');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        }
+
+        function updateCartBadge() {
+            const count = cart.reduce((acc, item) => acc + item.qty, 0);
+            document.getElementById('cart-badge').innerText = count;
+        }
+
+        function renderCartItems() {
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = '';
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 space-y-3">
+                        <i class="fa-solid fa-ice-cream text-5xl text-pink-200"></i>
+                        <p class="font-bold text-gray-600">Seu carrinho está vazio</p>
+                        <p class="text-xs text-gray-400">Escolha deliciosos sorvetes em nosso cardápio!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            cart.forEach(item => {
+                const el = document.createElement('div');
+                el.className = "p-3 bg-pink-50/40 rounded-2xl border border-pink-100 flex items-start justify-between gap-2";
+                el.innerHTML = `
+                    <div class="space-y-1">
+                        <h4 class="font-bold text-gray-800 text-xs sm:text-sm">${item.name}</h4>
+                        <p class="text-[11px] text-pink-600 font-semibold">Tamanho: ${item.containerName}</p>
+                        ${item.toppings.length > 0 ? `<p class="text-[10px] text-gray-500">+ ${item.toppings.join(', ')}</p>` : ''}
+                        ${item.notes ? `<p class="text-[10px] text-gray-500 italic">" ${item.notes} "</p>` : ''}
+                        <p class="font-extrabold text-xs text-gray-900 pt-1">R$ ${item.totalPrice.toFixed(2).replace('.', ',')}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-1 bg-white border rounded-xl px-1 py-0.5">
+                            <button onclick="changeCartQty(${item.cartId}, -1)" class="w-5 h-5 text-xs font-bold text-pink-600">-</button>
+                            <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+                            <button onclick="changeCartQty(${item.cartId}, 1)" class="w-5 h-5 text-xs font-bold text-pink-600">+</button>
+                        </div>
+                        <button onclick="removeFromCart(${item.cartId})" class="text-gray-400 hover:text-rose-600 p-1">
+                            <i class="fa-solid fa-trash-can text-sm"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        function changeCartQty(cartId, delta) {
+            const item = cart.find(i => i.cartId === cartId);
+            if (!item) return;
+            item.qty += delta;
+            if (item.qty <= 0) {
+                cart = cart.filter(i => i.cartId !== cartId);
+            } else {
+                item.totalPrice = item.unitPrice * item.qty;
+            }
+            updateCartBadge();
+            renderCartItems();
+            updateCartTotals();
+        }
+
+        function removeFromCart(cartId) {
+            cart = cart.filter(i => i.cartId !== cartId);
+            updateCartBadge();
+            renderCartItems();
+            updateCartTotals();
+        }
+
+        function updateCartTotals() {
+            const subtotal = cart.reduce((sum, item) => sum + item.totalPrice, 0);
+            const fulfillment = document.querySelector('input[name="fulfillment"]:checked')?.value || 'motoboy';
+            const deliveryFee = fulfillment === 'motoboy' ? 5.00 : 0.00;
+            const total = subtotal + deliveryFee;
+
+            document.getElementById('cart-subtotal').innerText = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+            document.getElementById('cart-delivery-fee').innerText = fulfillment === 'motoboy' ? 'R$ 5,00' : 'Grátis';
+            document.getElementById('cart-total').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        // -----------------------------------------------------------------
+        // 8. CHECKOUT E FINALIZAÇÃO DO PEDIDO
+        // -----------------------------------------------------------------
+        function goToCheckout() {
+            if (cart.length === 0) {
+                showToast('Adicione pelo menos 1 item ao carrinho antes de continuar!', 'error');
+                return;
+            }
+
+            // Oculta modal do carrinho e abre modal do checkout
+            toggleCartModal();
+
+            const fulfillment = document.querySelector('input[name="fulfillment"]:checked').value;
+            const addressSection = document.getElementById('address-section');
+            if (fulfillment === 'retirada') {
+                addressSection.style.display = 'none';
+                document.getElementById('cust-street').required = false;
+                document.getElementById('cust-number').required = false;
+            } else {
+                addressSection.style.display = 'block';
+                document.getElementById('cust-street').required = true;
+                document.getElementById('cust-number').required = true;
+            }
+
+            const modal = document.getElementById('modal-checkout');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closeCheckoutModal() {
+            const modal = document.getElementById('modal-checkout');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function togglePaymentMethod(method) {
+            const pixDiv = document.getElementById('pix-details');
+            const cardDiv = document.getElementById('card-details');
+
+            if (method === 'pix') {
+                pixDiv.classList.remove('hidden');
+                cardDiv.classList.add('hidden');
+            } else {
+                pixDiv.classList.add('hidden');
+                cardDiv.classList.remove('hidden');
+            }
+        }
+
+        function copyPixKey() {
+            const copyText = document.getElementById("pix-key-input");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+            showToast("Chave PIX copiada para a área de transferência!");
+        }
+
+        function submitOrder(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('cust-name').value;
+            const phone = document.getElementById('cust-phone').value;
+            const fulfillment = document.querySelector('input[name="fulfillment"]:checked').value;
+
+            let addressText = "Retirada no Balcão da Gelateria";
+            if (fulfillment === 'motoboy') {
+                const street = document.getElementById('cust-street').value;
+                const number = document.getElementById('cust-number').value;
+                const neighborhood = document.getElementById('cust-neighborhood').value;
+                const reference = document.getElementById('cust-reference').value;
+                addressText = `${street}, nº ${number} - ${neighborhood}${reference ? ' (Ref: ' + reference + ')' : ''}`;
+            }
+
+            const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+            let paymentText = "PIX (Copia e Cola)";
+            if (paymentMethod === 'card') {
+                paymentText = document.getElementById('card-type').value;
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + item.totalPrice, 0);
+            const deliveryFee = fulfillment === 'motoboy' ? 5.00 : 0.00;
+            const total = subtotal + deliveryFee;
+
+            // Formatação do Texto do WhatsApp
+            let message = `🍦 *NOVO PEDIDO - GELATERIA JARDIM GENEBRA* 🍦\n\n`;
+            message += `👤 *Cliente:* ${name}\n`;
+            message += `📞 *WhatsApp:* ${phone}\n`;
+            message += `🛵 *Envio:* ${fulfillment === 'motoboy' ? 'Entrega por Motoboy' : 'Retirada no Balcão'}\n`;
+            message += `📍 *Endereço:* ${addressText}\n\n`;
+            message += `📋 *ITENS DO PEDIDO:*\n`;
+
+            cart.forEach((item, index) => {
+                message += `${index + 1}. *${item.qty}x ${item.name}*\n`;
+                message += `   • Recipiente: ${item.containerName}\n`;
+                if (item.toppings.length > 0) {
+                    message += `   • Adicionais: ${item.toppings.join(', ')}\n`;
+                }
+                if (item.notes) {
+                    message += `   • Obs: ${item.notes}\n`;
+                }
+                message += `   • Valor: R$ ${item.totalPrice.toFixed(2).replace('.', ',')}\n\n`;
+            });
+
+            message += `💳 *Forma de Pagamento:* ${paymentText}\n`;
+            message += `💰 *Subtotal:* R$ ${subtotal.toFixed(2).replace('.', ',')}\n`;
+            message += `🛵 *Taxa Motoboy:* R$ ${deliveryFee.toFixed(2).replace('.', ',')}\n`;
+            message += `🎯 *TOTAL:* R$ ${total.toFixed(2).replace('.', ',')}\n\n`;
+            message += `Obrigado por comprar na Gelateria do Jardim Genebra!`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappNumber = "5519998765432"; // Telefone fictício da gelateria
+
+            // Abre o WhatsApp
+            window.open(`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodedMessage}`, '_blank');
+
+            // Limpa estado
+            cart = [];
+            updateCartBadge();
+            closeCheckoutModal();
+            showToast("Pedido enviado com sucesso para o WhatsApp!");
+        }
+
+        // -----------------------------------------------------------------
+        // 9. SISTEMA DE TOAST NOTIFICATIONS (Substituto seguro do alert)
+        // -----------------------------------------------------------------
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+
+            const bgColor = type === 'success' ? 'bg-emerald-600' : 'bg-rose-600';
+            const icon = type === 'success' ? 'fa-circle-check' : 'fa-triangle-exclamation';
+
+            toast.className = `${bgColor} text-white font-bold px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 text-xs sm:text-sm pointer-events-auto transition-all duration-300 transform translate-y-2 opacity-0`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icon} text-lg"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+        
+    </script>
+    <script src="chatbot.js"></script>
+            <script>
+                // Inicializa o chatbot apontando para a sua base de dados extra em JSON
+                initChatbot({
+                    jsonUrl: 'minha-base-dados.json'
+                });
+            </script>
+</body>
+</html>
