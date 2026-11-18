@@ -1,0 +1,79 @@
+[
+  {
+    "pergunta": "Quais sabores de sorvete estão disponíveis?",
+    "keywords": [
+      "sabores",
+      "sorvete",
+      "chocolate",
+      "morango",
+      "baunilha",
+      "pistache",
+      "ninho",
+      "nutella",
+      "cardapio"
+    ],
+    "resposta": "Temos **Sorvetes de Massa** (Chocolate Belga, Morango Gourmet, Pistache Italiano, Ninho com Nutella, Maracujá, Doce de Leite, Baunilha e Flocos), **Milkshakes** (Ovomaltine, Nutella, Oreo, Morango) e **Especialidades** como Açaí na Tigela, Sundae e Banana Split!"
+  },
+  {
+    "pergunta": "Quais são os preços dos sorvetes?",
+    "keywords": [
+      "preco",
+      "precos",
+      "valor",
+      "valores",
+      "custo",
+      "quanto custa"
+    ],
+    "resposta": "Nossos **Picolés Recheados** custam **R$ 8,50**, os **Sorvetes de Massa** começam em **R$ 10,00**, os **Milkshakes** a partir de **R$ 14,00** e as **Taças/Açaí** de **R$ 22,00 a R$ 26,00**. Adicionais saem por **R$ 2,00** cada."
+  },
+  {
+    "pergunta": "A sorveteria faz entregas?",
+    "keywords": [
+      "entrega",
+      "delivery",
+      "entregar",
+      "motoboy",
+      "taxa",
+      "frete",
+      "casa"
+    ],
+    "resposta": "Sim! Fazemos entregas rápidas via **Motoboy Expresso** (20 a 35 min) com taxa fixa de **R$ 5,00** no **Jardim Genebra** e bairros vizinhos. Você também pode escolher **Retirada no Balcão (Grátis)**."
+  },
+  {
+    "pergunta": "Quais são os horários de funcionamento da sorveteria?",
+    "keywords": [
+      "horario",
+      "funcionamento",
+      "aberto",
+      "fecha",
+      "abre",
+      "atendimento",
+      "domingo"
+    ],
+    "resposta": "Funcionamos **todos os dias (Segunda a Domingo), das 09:00h às 18:00h**. No topo do site você também vê em tempo real se estamos abertos agora!"
+  },
+  {
+    "pergunta": "Como posso fazer um pedido de sorvete?",
+    "keywords": [
+      "pedido",
+      "comprar",
+      "pedir",
+      "encomenda",
+      "carrinho",
+      "whatsapp"
+    ],
+    "resposta": "Escolha seus itens no **Cardápio**, clique em **Montar & Pedir** para selecionar recipiente e coberturas, abra **Meu Pedido** no topo e finalize para enviar o resumo direto ao nosso **WhatsApp (19) 99876-5432**!"
+  },
+  {
+    "pergunta": "Quais formas de pagamento vocês aceitam?",
+    "keywords": [
+      "pagamento",
+      "pagar",
+      "pix",
+      "cartao",
+      "credito",
+      "debito"
+    ],
+    "resposta": "Aceitamos **PIX (Copia e Cola / QR Code)** com aprovação imediata e **Cartão de Crédito ou Débito** na maquininha levada pelo motoboy."
+  }
+]
